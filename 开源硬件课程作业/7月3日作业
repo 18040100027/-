@@ -1,0 +1,70 @@
+char MORSE[][4] = {
+  {'.', '-', '*', '*'}, //A
+  {'-', '.', '.', '.'}, //B
+  {'-', '.', '-', '.'}, //C
+  {'-', '.', '.', '*'}, //D
+  {'.', '*', '*', '*'}, //E
+  {'.', '.', '-', '.'}, //F
+  {'-', '-', '.', '*'}, //G
+  {'.', '.', '.', '.'}, //H
+  {'.', '.', '*', '*'}, //I
+  {'.', '-', '-', '-'}, //J
+  {'-', '.', '-', '*'}, //K
+  {'.', '-', '.', '.'}, //L
+  {'-', '-', '*', '*'}, //M
+  {'-', '.', '*', '*'}, //N
+  {'-', '-', '-', '*'}, //O
+  {'.', '-', '-', '.'}, //P
+  {'-', '-', '.', '-'}, //Q
+  {'.', '-', '.', '*'}, //R
+  {'.', '.', '.', '*'}, //S
+  {'-', '*', '*', '*'}, //T
+  {'.', '.', '-', '*'}, //U
+  {'.', '.', '.', '-'}, //V
+  {'.', '-', '-', '*'}, //W
+  {'-', '.', '.', '-'}, //X
+  {'-', '.', '-', '-'}, //Y
+  {'-', '-', '.', '.'}  //Z
+};
+int pin = 13;
+void dot() {   digitalWrite(pin, HIGH);   delay(250);   digitalWrite(pin, LOW);   delay(250); }   
+void dash() {   digitalWrite(pin, HIGH);   delay(1000);   digitalWrite(pin, LOW);   delay(250); }
+void setup() {
+  Serial.begin(9600);
+   pinMode(pin, OUTPUT); 
+}
+
+void loop() {
+  String str = ""; 
+  String morse = ""; 
+  int i,j , temp = 0;
+  int n = 0;
+  while (Serial.available() > 0) {
+    temp = 1;  
+    str += char(Serial.read());
+    delay(2);
+    n++;
+  }
+
+  if (temp) {
+    for (i = 0; i < n; i++)
+    {
+      for (j = 0; j < 4; j++)
+      {
+        if (str[i] >= 97 && str[i] <= 122)
+        {
+          morse += char(MORSE[int(str[i] - 97)][j]);
+        }
+      }
+      morse += ' ';
+    }
+    Serial.println(morse);
+    for(i=0;i<=4*n;i++)
+    {if(morse[i]=='.')
+      dot();
+     if(morse[i]=='-')
+      dash();
+    }
+  }
+  delay(2);
+}
